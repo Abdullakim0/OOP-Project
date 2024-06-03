@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 public class GameLauncherGUI extends JFrame {
     private gameSystem game;
@@ -77,12 +78,13 @@ public class GameLauncherGUI extends JFrame {
     private void showWelcome() {
         // Placeholder method for showing welcome
         Welcome_to welcomeTo=new Welcome_to();
+        usage us=new usage();
+        usage2 us2=new usage2();
         StringBuilder welcomeMessage = new StringBuilder();
         welcomeMessage.append("We are delighted to see you again!\n");
-        welcomeMessage.append("- ").append(welcomeTo.usage()).append("\n");
         welcomeMessage.append("- ").append(welcomeTo.welcome()).append("\n");
-        welcomeMessage.append("- ").append(welcomeTo.rule()).append("\n");
-
+        welcomeMessage.append("- ").append(us.welcome()).append("\n");
+        welcomeMessage.append("- ").append(us2.welcome()).append("\n");
         JOptionPane.showMessageDialog(this, welcomeMessage.toString(), "Welcome", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -151,14 +153,27 @@ public class GameLauncherGUI extends JFrame {
     }
 
     private void showProb() {
+        List<String> player1Hand;
+        List<String> player2Hand;
+        List<String> player3Hand;
+        String[] colors = {"Red", "Blue", "White", "Black", "Red", "Blue", "White", "Red", "Blue", "White"};
+
+            // Shuffle the colors
+        List<String> colorList = Arrays.asList(colors);
+        Collections.shuffle(colorList);
+
+            // Deal the colors between players
+        player1Hand = new ArrayList<>(colorList.subList(0, colorList.size() / 3));
         prob_win_player1 calculator=new prob_win_player1();
-        String pl1=calculator.prob_win_player("");
+        String pl1=calculator.prob_win_player1(player1Hand);
 
+        player2Hand= new ArrayList<>(colorList.subList(colorList.size() / 3, 2 * colorList.size() / 3));
         prob_win_player2 calculator2=new prob_win_player2();
-        String pl2=calculator2.prob_win_player("");
+        String pl2=calculator2.prob_win_player2(player2Hand);
 
+        player3Hand=new ArrayList<>(colorList.subList(2 * colorList.size() / 3, colorList.size()-1));
         prob_win_player3 calculator3=new prob_win_player3();
-        String pl3=calculator3.prob_win_player("");
+        String pl3=calculator3.prob_win_player3(player3Hand);
 
 
         String combine=pl1+"\n\n"+pl2+"\n\n"+pl3;
