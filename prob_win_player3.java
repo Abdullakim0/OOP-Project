@@ -1,23 +1,47 @@
-import javax.swing.*;
-import java.util.Random;
-public class prob_win_player3 {
-    public String prob_win_player(String round) {
+import java.util.List;
 
-        StringBuilder result=new StringBuilder();
-        result.append("Probability for Player 1: ").append(round).append("\n\n");
+public class prob_win_player3<T> {
 
+    public String calculateWinProbability(List<T> playerHand) {
+        StringBuilder result = new StringBuilder();
+        result.append("Probability for Player3: \n\n");
 
-        for (int i = 1; i <= 5; i++) {
-            Random rand = new Random();
-            int randomNum = rand.nextInt(10);
-            if (randomNum < 2) {
-                result.append("Round ").append(i).append(" Your winning chance is low\n");
-            } else if (randomNum <= 4 || randomNum == 2) {
-                result.append("Round ").append(i).append(" Your winning chance is average\n");
+        boolean hasBlackCard = playerHand.contains("Black");
+        if (hasBlackCard) {
+            result.append("Winning chance is low\n");
+        } else {
+            int high = 0;
+            int avg = 0;
+            int low = 0;
+
+            for (T card : playerHand) {
+                String cardColor = card.toString();
+                switch (cardColor) {
+                    case "Red":
+                    case "Blue":
+                        high++;
+                        break;
+                    case "White":
+                        avg++;
+                        break;
+                    case "Black":
+                        low++;
+                        break;
+                }
+            }
+            if (high > avg && high > low) {
+                result.append("Player3 has high winning chance\n");
+            } else if (avg >= high && avg > low) {
+                result.append("Player3 has average winning chance\n");
             } else {
-                result.append("Round ").append(i).append(" Your winning chance is high\n");
+                result.append("Player3 has low winning chance\n");
             }
         }
         return result.toString();
+    }
+
+    // Overloaded method to accept an array of strings
+    public String calculateWinProbability(String[] playerHand) {
+        return calculateWinProbability((List<T>) List.of(playerHand));
     }
 }
